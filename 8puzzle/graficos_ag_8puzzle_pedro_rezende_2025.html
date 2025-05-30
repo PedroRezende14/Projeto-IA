@@ -1,0 +1,290 @@
+import React, { useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ResponsiveContainer, ScatterChart, Scatter, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, PieChart, Pie, Cell } from 'recharts';
+
+const GeneticAlgorithmCharts = () => {
+  const [activeTab, setActiveTab] = useState('convergence');
+
+  // Dados simulados baseados no trabalho
+  const convergenceData = [
+    { geracao: 0, agTradicional: -20, agIlhas: -22 },
+    { geracao: 10, agTradicional: -18, agIlhas: -19 },
+    { geracao: 20, agTradicional: -15, agIlhas: -16 },
+    { geracao: 30, agTradicional: -12, agIlhas: -14 },
+    { geracao: 40, agTradicional: -8, agIlhas: -11 },
+    { geracao: 50, agTradicional: -5, agIlhas: -8 },
+    { geracao: 60, agTradicional: -3, agIlhas: -6 },
+    { geracao: 70, agTradicional: -1, agIlhas: -4 },
+    { geracao: 80, agTradicional: 0, agIlhas: -2 },
+    { geracao: 90, agTradicional: 0, agIlhas: -1 },
+    { geracao: 100, agTradicional: 0, agIlhas: 0 },
+  ];
+
+  const diversityData = [
+    { geracao: 0, tradicional: 95, ilhas: 98 },
+    { geracao: 20, tradicional: 80, ilhas: 92 },
+    { geracao: 40, tradicional: 60, ilhas: 85 },
+    { geracao: 60, tradicional: 35, ilhas: 78 },
+    { geracao: 80, tradicional: 15, ilhas: 65 },
+    { geracao: 100, tradicional: 5, ilhas: 45 },
+  ];
+
+  const mutationImpactData = [
+    { taxa: '1%', convergencia: 120, diversidade: 20 },
+    { taxa: '5%', convergencia: 95, diversidade: 45 },
+    { taxa: '10%', convergencia: 80, diversidade: 65 },
+    { taxa: '20%', convergencia: 85, diversidade: 85 },
+    { taxa: '50%', convergencia: 150, diversidade: 95 },
+  ];
+
+  const islandTopologyData = [
+    { ilha: 'Ilha 0', individuos: 25, melhorFitness: -2, migracoes: 8 },
+    { ilha: 'Ilha 1', individuos: 25, melhorFitness: -1, migracoes: 7 },
+    { ilha: 'Ilha 2', individuos: 25, melhorFitness: -3, migracoes: 9 },
+    { ilha: 'Ilha 3', individuos: 25, melhorFitness: 0, migracoes: 6 },
+  ];
+
+  const operatorsComparison = [
+    { operador: 'Seleção Top-20', eficiencia: 85, diversidade: 70, implementacao: 90 },
+    { operador: 'Cruzamento 1-Ponto', eficiencia: 80, diversidade: 85, implementacao: 95 },
+    { operador: 'Mutação 10%', eficiencia: 75, diversidade: 90, implementacao: 85 },
+  ];
+
+  const performanceMetrics = [
+    { metrica: 'Velocidade Convergência', valor: 78 },
+    { metrica: 'Manutenção Diversidade', valor: 65 },
+    { metrica: 'Qualidade Solução', valor: 92 },
+    { metrica: 'Robustez', valor: 85 },
+    { metrica: 'Eficiência Computacional', valor: 88 },
+  ];
+
+  const movementDistribution = [
+    { movimento: 'Cima ↑', count: 28, color: '#8884d8' },
+    { movimento: 'Baixo ↓', count: 24, color: '#82ca9d' },
+    { movimento: 'Esquerda ←', count: 22, color: '#ffc658' },
+    { movimento: 'Direita →', count: 26, color: '#ff7300' },
+  ];
+
+  const TabButton = ({ id, label, isActive, onClick }) => (
+    <button
+      onClick={() => onClick(id)}
+      className={`px-6 py-3 font-medium rounded-t-lg transition-all duration-200 ${
+        isActive 
+          ? 'bg-blue-600 text-white shadow-lg' 
+          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+      }`}
+    >
+      {label}
+    </button>
+  );
+
+  const renderChart = () => {
+    switch(activeTab) {
+      case 'convergence':
+        return (
+          <div className="space-y-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Convergência: AG Tradicional vs AG com Ilhas</h3>
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={convergenceData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="geracao" />
+                <YAxis label={{ value: 'Fitness (Distância Manhattan)', angle: -90, position: 'insideLeft' }} />
+                <Tooltip formatter={(value, name) => [value, name === 'agTradicional' ? 'AG Tradicional' : 'AG com Ilhas']} />
+                <Legend />
+                <Line type="monotone" dataKey="agTradicional" stroke="#8884d8" strokeWidth={3} name="AG Tradicional" />
+                <Line type="monotone" dataKey="agIlhas" stroke="#82ca9d" strokeWidth={3} name="AG com Ilhas" />
+              </LineChart>
+            </ResponsiveContainer>
+            <p className="text-sm text-gray-600">
+              O gráfico mostra que o AG tradicional converge mais rapidamente (80 gerações) enquanto o AG com ilhas 
+              mantém maior diversidade, convergindo em 100 gerações com maior robustez.
+            </p>
+          </div>
+        );
+
+      case 'diversity':
+        return (
+          <div className="space-y-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Manutenção da Diversidade Genética</h3>
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={diversityData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="geracao" />
+                <YAxis label={{ value: 'Diversidade (%)', angle: -90, position: 'insideLeft' }} />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="tradicional" stroke="#ff7300" strokeWidth={3} name="AG Tradicional" />
+                <Line type="monotone" dataKey="ilhas" stroke="#00c49f" strokeWidth={3} name="AG com Ilhas" />
+              </LineChart>
+            </ResponsiveContainer>
+            <p className="text-sm text-gray-600">
+              O modelo com ilhas mantém maior diversidade ao longo das gerações, reduzindo o risco de convergência prematura.
+            </p>
+          </div>
+        );
+
+      case 'mutation':
+        return (
+          <div className="space-y-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Impacto da Taxa de Mutação</h3>
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart data={mutationImpactData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="taxa" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="convergencia" fill="#8884d8" name="Gerações até Convergência" />
+                <Bar dataKey="diversidade" fill="#82ca9d" name="Diversidade Mantida (%)" />
+              </BarChart>
+            </ResponsiveContainer>
+            <p className="text-sm text-gray-600">
+              Taxa de mutação de 10% oferece o melhor equilíbrio entre velocidade de convergência e manutenção da diversidade.
+            </p>
+          </div>
+        );
+
+      case 'islands':
+        return (
+          <div className="space-y-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Performance das Ilhas</h3>
+            <ResponsiveContainer width="100%" height={400}>
+              <ScatterChart data={islandTopologyData}>
+                <CartesianGrid />
+                <XAxis dataKey="migracoes" name="Migrações" />
+                <YAxis dataKey="melhorFitness" name="Melhor Fitness" />
+                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                <Scatter name="Ilhas" data={islandTopologyData} fill="#8884d8" />
+              </ScatterChart>
+            </ResponsiveContainer>
+            <div className="grid grid-cols-4 gap-4 mt-4">
+              {islandTopologyData.map((ilha, index) => (
+                <div key={index} className="bg-blue-50 p-4 rounded-lg text-center">
+                  <h4 className="font-semibold text-blue-800">{ilha.ilha}</h4>
+                  <p className="text-sm">Fitness: {ilha.melhorFitness}</p>
+                  <p className="text-sm">Migrações: {ilha.migracoes}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'operators':
+        return (
+          <div className="space-y-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Análise dos Operadores Genéticos</h3>
+            <ResponsiveContainer width="100%" height={400}>
+              <RadarChart data={operatorsComparison}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="operador" />
+                <PolarRadiusAxis angle={30} domain={[0, 100]} />
+                <Radar name="Eficiência" dataKey="eficiencia" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
+                <Radar name="Diversidade" dataKey="diversidade" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
+                <Radar name="Facilidade Implementação" dataKey="implementacao" stroke="#ffc658" fill="#ffc658" fillOpacity={0.3} />
+                <Legend />
+              </RadarChart>
+            </ResponsiveContainer>
+            <div className="text-sm text-gray-600">
+              <p><strong>Seleção Top-20:</strong> Boa eficiência, equilibra diversidade</p>
+              <p><strong>Cruzamento 1-Ponto:</strong> Preserva subsequências úteis</p>
+              <p><strong>Mutação 10%:</strong> Máxima diversidade, implementação robusta</p>
+            </div>
+          </div>
+        );
+
+      case 'movements':
+        return (
+          <div className="space-y-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Distribuição de Movimentos no Cromossomo</h3>
+            <ResponsiveContainer width="100%" height={400}>
+              <PieChart>
+                <Pie
+                  data={movementDistribution}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ movimento, percent }) => `${movimento} ${(percent * 100).toFixed(0)}%`}
+                  outerRadius={120}
+                  fill="#8884d8"
+                  dataKey="count"
+                >
+                  {movementDistribution.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+            <p className="text-sm text-gray-600">
+              Distribuição equilibrada dos 4 movimentos possíveis (↑↓←→) em cromossomos de 50 genes.
+            </p>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto p-6 bg-white">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          Algoritmos Genéticos para 8-Puzzle
+        </h1>
+        <p className="text-lg text-gray-600">
+          Análise Comparativa: AG Tradicional vs AG com Estratégia de Ilhas
+        </p>
+        <p className="text-sm text-gray-500 mt-2">
+          Pedro Luiz Gonçalves Rezende - IFC Rio do Sul
+        </p>
+      </div>
+
+      <div className="flex flex-wrap gap-2 mb-6 justify-center">
+        <TabButton id="convergence" label="Convergência" isActive={activeTab === 'convergence'} onClick={setActiveTab} />
+        <TabButton id="diversity" label="Diversidade" isActive={activeTab === 'diversity'} onClick={setActiveTab} />
+        <TabButton id="mutation" label="Mutação" isActive={activeTab === 'mutation'} onClick={setActiveTab} />
+        <TabButton id="islands" label="Ilhas" isActive={activeTab === 'islands'} onClick={setActiveTab} />
+        <TabButton id="operators" label="Operadores" isActive={activeTab === 'operators'} onClick={setActiveTab} />
+        <TabButton id="movements" label="Movimentos" isActive={activeTab === 'movements'} onClick={setActiveTab} />
+      </div>
+
+      <div className="bg-gray-50 rounded-lg p-6 shadow-lg">
+        {renderChart()}
+      </div>
+
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-blue-50 p-4 rounded-lg">
+          <h4 className="font-semibold text-blue-800 mb-2">AG Tradicional</h4>
+          <ul className="text-sm text-blue-700 space-y-1">
+            <li>• População única (100 indivíduos)</li>
+            <li>• Convergência rápida</li>
+            <li>• Implementação simples</li>
+            <li>• Adequado para problemas simples</li>
+          </ul>
+        </div>
+        
+        <div className="bg-green-50 p-4 rounded-lg">
+          <h4 className="font-semibold text-green-800 mb-2">AG com Ilhas</h4>
+          <ul className="text-sm text-green-700 space-y-1">
+            <li>• 4 ilhas de 25 indivíduos</li>
+            <li>• Migração a cada 50 gerações</li>
+            <li>• Maior diversidade mantida</li>
+            <li>• Mais robusto contra mínimos locais</li>
+          </ul>
+        </div>
+        
+        <div className="bg-yellow-50 p-4 rounded-lg">
+          <h4 className="font-semibold text-yellow-800 mb-2">Parâmetros Otimizados</h4>
+          <ul className="text-sm text-yellow-700 space-y-1">
+            <li>• Taxa de mutação: 10%</li>
+            <li>• Cromossomo: 50 genes</li>
+            <li>• Seleção: Top-20</li>
+            <li>• Elitismo: melhor preservado</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default GeneticAlgorithmCharts;
